@@ -1,0 +1,10 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="AndroidLintAssert" enabled="true" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintDuplicatePlatformClasses" enabled="true" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintInvalidUsesTagAttribute" enabled="true" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintResAuto" enabled="true" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="AndroidLintWrongConstant" enabled="true" level="ERROR" enabled_by_default="false" />
+  </profile>
+</component>
