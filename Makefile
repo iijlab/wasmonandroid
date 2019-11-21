@@ -7,9 +7,9 @@ install: build
 
 build:
 	cd cargo && \
-		cargo build --target aarch64-linux-android --release && \
-		cargo build --target armv7-linux-androideabi --release && \
-		cargo build --target i686-linux-android --release
+		cargo build -Z unstable-options --target aarch64-linux-android --out-dir ../android/app/src/main/jniLibs/arm64-v8a && \
+		cargo build -Z unstable-options --target i686-linux-android --out-dir ../android/app/src/main/jniLibs/x86
+		#cargo build -Z unstable-options --target armv7-linux-androideabi --out-dir ../android/app/src/main/jniLibs/armeabi-v7a && \
 
 clean:
 	cd cargo && cargo clean
