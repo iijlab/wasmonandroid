@@ -23,9 +23,7 @@ pub mod android {
     extern crate android_logger;
     extern crate jni;
 
-    // HostRef is available only in the later version of wasmtime-api
-    // use wasmtime_api::{Config, HostRef, Engine, Store, Module};
-    use wasmtime_api as wasmtime;
+    use wasmer_runtime as wasmer;
 
     use std::cell::RefCell;
     use std::ffi::CString;
@@ -66,16 +64,12 @@ pub mod android {
     }
 
     #[no_mangle]
-    pub extern "C" fn Java_jp_co_iijii_wasmonandroid_Wasmtime_runWasm(
+    pub extern "C" fn Java_jp_co_iijii_wasmonandroid_Wasmer_runWasm(
         env: JNIEnv,
         _: JClass,
         jwasm_path: JString,
     ) -> () {
-        // Initialize.
-        let engine = Rc::new(RefCell::new(wasmtime::Engine::new(
-            wasmtime::Config::default(),
-        )));
-        let store = Rc::new(RefCell::new(wasmtime::Store::new(engine)));
+        let import_object = wasmer::imports! {};
 
         let wasm_path: &String = &env
             .get_string(jwasm_path)
@@ -83,38 +77,15 @@ pub mod android {
             .into();
         let wasm_bin = read(wasm_path).expect(&format!("Failed to read {}", wasm_path));
 
-        let module = Rc::new(RefCell::new(
-            wasmtime::Module::new(store.clone(), &wasm_bin)
-                .expect(&format!("Can't compile {:?}", wasm_bin)),
-        ));
+        let instance = wasmer::instantiate(&wasm_bin, &import_object).unwrap();
 
-        let gcd_index = module
-            .borrow()
-            .exports()
-            .iter()
-            .enumerate()
-            .find(|(_, export)| export.name().to_string() == "gcd")
-            .expect("gcd function not found!")
-            .0;
+        let result = instance
+            .dyn_func("gcd")
+            .unwrap()
+            .call(&[wasmer::Value::I32(6), wasmer::Value::I32(27)])
+            .unwrap();
 
-        let instance = Rc::new(RefCell::new(
-            wasmtime::Instance::new(store.clone(), module, &[])
-                .expect("Failed to instantiate a module."),
-        ));
-
-        let gcd = instance.borrow().exports()[gcd_index]
-            .borrow()
-            .func()
-            .clone();
-
-        debug!("Running WASM");
-
-        let result = gcd
-            .borrow()
-            .call(&[wasmtime::Val::from(6i32), wasmtime::Val::from(27i32)])
-            .expect("Error calling a function of wasm");
-
-        error!("{:?}", result);
+        error!("Result by Wasmer: {:?}", result);
     }
 
     #[no_mangle]

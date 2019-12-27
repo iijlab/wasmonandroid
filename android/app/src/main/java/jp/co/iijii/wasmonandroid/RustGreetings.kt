@@ -6,6 +6,7 @@ class RustGreetings {
     }
 
     companion object {
+        @JvmStatic
         private external fun greeting(pattern: String): String
     }
 }

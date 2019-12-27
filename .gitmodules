@@ -1,0 +1,6 @@
+[submodule "vendor/wasmer"]
+	path = vendor/wasmer
+	url = https://github.com/wasmerio/wasmer.git
+[submodule "vendor/libc"]
+	path = vendor/libc
+	url = https://github.com/igrep/libc.git
