@@ -23,14 +23,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         setContentView(R.layout.activity_main)
 
-        val gcdWasm = File(filesDir, "gcd.wasm")
+        val wasmFilePath = "wasi-hello.wasm"
+        val wasmFile = File(filesDir, wasmFilePath)
 
-        if (!gcdWasm.exists()) {
+        if (!wasmFile.exists()) {
             findViewById<TextView>(R.id.initial_view).text =
                 resources.getString(R.string.copying_sample_wasm_files)
             launch(Dispatchers.IO) {
-                assets.open("gcd.wasm").use { src ->
-                    FileOutputStream(gcdWasm).use { dest ->
+                assets.open(wasmFilePath).use { src ->
+                    FileOutputStream(wasmFile).use { dest ->
                         src.copyTo(dest)
                     }
                 }
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         launch {
             withContext(Dispatchers.IO) {
-                Wasmer.runWasm(gcdWasm.absolutePath)
+                Wasmer.runWasm(wasmFile.absolutePath)
             }
 
             // TODO: Show result of wasm
