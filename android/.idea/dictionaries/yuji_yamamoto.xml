@@ -1,7 +1,34 @@
 <component name="ProjectDictionaryState">
   <dictionary name="yuji-yamamoto">
     <words>
+      <w>atim</w>
+      <w>badf</w>
+      <w>ctim</w>
+      <w>datasync</w>
+      <w>deref</w>
+      <w>fdflags</w>
+      <w>filetype</w>
+      <w>inode</w>
+      <w>inodes</w>
+      <w>iovs</w>
+      <w>mtim</w>
+      <w>nlink</w>
+      <w>nwritten</w>
+      <w>preopen</w>
+      <w>preopened</w>
+      <w>preopens</w>
+      <w>preopentype</w>
+      <w>prestat</w>
+      <w>readdir</w>
+      <w>readlink</w>
+      <w>seekable</w>
+      <w>ubyte</w>
+      <w>uint</w>
+      <w>ulong</w>
+      <w>wasi</w>
       <w>wasm</w>
+      <w>wasmer</w>
+      <w>witx</w>
     </words>
   </dictionary>
 </component>

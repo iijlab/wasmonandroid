@@ -1,8 +1,12 @@
 package jp.co.iijii.wasmonandroid
 
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import jp.co.iijii.wasmonandroid.wasi.PreopenDirectory
+import jp.co.iijii.wasmonandroid.wasi.WasiEnv
+import jp.co.iijii.wasmonandroid.wasi.WasiFs
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
@@ -11,7 +15,8 @@ import java.io.FileOutputStream
 class MainActivity : AppCompatActivity(), CoroutineScope {
     companion object {
         init {
-            System.loadLibrary("greeting"); }
+            System.loadLibrary("greeting")
+        }
     }
 
     private val job = Job()
@@ -26,8 +31,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val wasmFilePath = "wasi-hello.wasm"
         val wasmFile = File(filesDir, wasmFilePath)
 
+        val statusView = findViewById<TextView>(R.id.status_view)
         if (!wasmFile.exists()) {
-            findViewById<TextView>(R.id.initial_view).text =
+            statusView.text =
                 resources.getString(R.string.copying_sample_wasm_files)
             launch(Dispatchers.IO) {
                 assets.open(wasmFilePath).use { src ->
@@ -38,16 +44,27 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }
         }
 
-        findViewById<TextView>(R.id.initial_view).text =
-            resources.getString(R.string.running_wasm)
-
+        statusView.text = resources.getString(R.string.running_wasm)
+        val consoleView = findViewById<EditText>(R.id.console_view)
         launch {
-            withContext(Dispatchers.IO) {
-                Wasmer.runWasm(wasmFile.absolutePath)
+            withContext(Dispatchers.Main) {
+                val preopens = listOf(
+                    PreopenDirectory("test1", null, read = true, write = true, create = true),
+                    PreopenDirectory("test2", null, false, write = false, create = false)
+                )
+                Wasmer.runWasm(
+                    wasmFile.absolutePath,
+                    WasiEnv(
+                        WasiFs(
+                            stdin = NullHandle,
+                            stdout = OutTextViewHandle(consoleView),
+                            stderr = OutTextViewHandle(consoleView),
+                            preopens = preopens
+                        )
+                    )
+                )
+                statusView.text = resources.getString(R.string.finished_running_wasm)
             }
-
-            // TODO: Show result of wasm
-            findViewById<TextView>(R.id.initial_view).text = "Finished"
         }
     }
 

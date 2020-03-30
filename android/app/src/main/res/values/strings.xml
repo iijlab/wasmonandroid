@@ -3,4 +3,6 @@
     <string name="initializing">Initializing…</string>
     <string name="copying_sample_wasm_files">Sample wasm files not found. Copying…</string>
     <string name="running_wasm">Running a wasm file…</string>
+    <string name="finished_running_wasm">Done.</string>
+    <string name="console" />
 </resources>
