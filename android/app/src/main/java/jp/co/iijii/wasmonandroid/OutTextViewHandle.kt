@@ -1,7 +1,7 @@
 package jp.co.iijii.wasmonandroid
 
 import android.util.Log
-import android.widget.TextView
+import android.widget.EditText
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
@@ -9,9 +9,8 @@ import jp.co.iijii.wasmonandroid.wasi.Filesize
 import jp.co.iijii.wasmonandroid.wasi.Size
 import jp.co.iijii.wasmonandroid.wasi.Timestamp
 import jp.co.iijii.wasmonandroid.wasi.Whence
-import java.lang.UnsupportedOperationException
 
-class OutTextViewHandle(private val textView: TextView) :
+class OutTextViewHandle(private val view: EditText) :
     Handle {
     override fun read() {
         TODO("Not yet implemented")
@@ -22,7 +21,7 @@ class OutTextViewHandle(private val textView: TextView) :
 
     override fun write(bytes: ByteArray): Result<Size, Exception> {
         // TODO: Character encoding. bytes may not be valid UTF-8 due to split writing
-        textView.append(bytes.toString(Charsets.UTF_8))
+        view.editableText.insert(view.length() - 1, bytes.toString(Charsets.UTF_8))
         return Ok(bytes.size)
     }
 

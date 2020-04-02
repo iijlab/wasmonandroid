@@ -5,4 +5,5 @@
     <string name="running_wasm">Running a wasm file…</string>
     <string name="finished_running_wasm">Done.</string>
     <string name="console" />
+    <string name="cursor"><font bgcolor="#808080"> </font></string>
 </resources>
