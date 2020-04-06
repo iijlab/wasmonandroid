@@ -8,11 +8,33 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/select_wasm_file"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="3sp"
+            android:layout_weight="10" />
+
+        <Button
+            android:id="@+id/run_wasm"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:text="@string/run" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/status_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="30"
         android:text="@string/initializing"
         android:textAlignment="center"
         android:textColor="@android:color/primary_text_light_nodisable"
@@ -25,7 +47,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_weight="8"
+        android:layout_weight="800"
         android:autofillHints=""
         android:background="#000225"
         android:ems="10"

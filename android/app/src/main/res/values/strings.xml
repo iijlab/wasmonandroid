@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Wasm On Android</string>
-    <string name="initializing">Initializing…</string>
+    <string name="initializing">Select a wasm file from above.</string>
     <string name="copying_sample_wasm_files">Sample wasm files not found. Copying…</string>
-    <string name="running_wasm">Running a wasm file…</string>
+    <string name="running_wasm">Running…</string>
     <string name="finished_running_wasm">Done.</string>
     <string name="console" />
     <string name="cursor"><font bgcolor="#808080"> </font></string>
+    <string name="run">Run</string>
 </resources>
