@@ -22,7 +22,7 @@ pub mod android {
     extern crate android_logger;
     extern crate jni;
 
-    use wasmer_runtime::{func, imports, instantiate, Array, Ctx, ImportObject, WasmPtr};
+    use wasmer_runtime::{func, imports, instantiate, Array, Ctx, Func, ImportObject, WasmPtr};
     use wasmer_runtime_core::memory::Memory;
     use wasmer_wasi::types::{__wasi_ciovec_t, __wasi_exitcode_t, __wasi_fd_t, __wasi_prestat_t};
     use wasmer_wasi::ExitCode;
@@ -90,7 +90,12 @@ pub mod android {
         let instance = instantiate(&wasm_bin, &import_object).unwrap();
 
         debug!("Calling _start");
-        instance.dyn_func("_start").unwrap().call(&[]).unwrap();
+        instance
+            .exports
+            .get::<Func<(), ()>>("_start")
+            .unwrap()
+            .call()
+            .unwrap();
     }
 
     #[no_mangle]
