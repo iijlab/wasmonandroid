@@ -2,10 +2,9 @@
 
 build:
 	cd cargo && \
+		cargo build --target aarch64-linux-android -Z unstable-options --out-dir ../android/app/src/main/jniLibs/arm64-v8a && \
 		cargo build --target x86_64-linux-android  -Z unstable-options --out-dir ../android/app/src/main/jniLibs/x86_64 && \
 		echo All done!
-		# On ARM, Stackoverflow happens!
-		#cargo build --target aarch64-linux-android -Z unstable-options --out-dir ../android/app/src/main/jniLibs/arm64-v8a && \
 		#cargo build -Z unstable-options --target armv7-linux-androideabi --out-dir ../android/app/src/main/jniLibs/armeabi-v7a && \
 		#cargo build -Z unstable-options --target i686-linux-android --out-dir ../android/app/src/main/jniLibs/x86 && \
 
