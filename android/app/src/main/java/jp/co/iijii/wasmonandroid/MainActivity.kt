@@ -8,7 +8,6 @@ import jp.co.iijii.wasmonandroid.wasi.PreopenDirectory
 import jp.co.iijii.wasmonandroid.wasi.WasiEnv
 import jp.co.iijii.wasmonandroid.wasi.WasiFs
 import kotlinx.coroutines.*
-import kotlinx.coroutines.selects.select
 import java.io.File
 import java.io.FileOutputStream
 
@@ -31,7 +30,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         setContentView(R.layout.activity_main)
 
-        val wasmFiles = filesDir.listFiles()!!.toList().filter { it.name.endsWith(".wasm") }
+        val wasmFiles =
+            assets.list("")!!.toList().filter { it.endsWith(".wasm") }.map(filesDir::resolve)
         val statusView = findViewById<TextView>(R.id.status_view)
 
         wasmFiles.filter { !it.exists() }.also { nonExistingWasmFiles ->
@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                         }
                     }
                 }
+                statusView.text =
+                    resources.getString(R.string.initializing)
             }
         }
 
