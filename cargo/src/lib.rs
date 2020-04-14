@@ -85,7 +85,7 @@ pub mod android {
             .into();
         let wasm_bin = read(wasm_path).expect(&format!("Failed to read {}", wasm_path));
 
-        let import_object = generate_import_object(env, jwasi_env);
+        let import_object = generate_import_object_snapshot1_inner(env, jwasi_env);
 
         let instance = instantiate(&wasm_bin, &import_object).unwrap();
 
@@ -126,36 +126,8 @@ pub mod android {
         }));
     }
 
-    /// Creates a Wasi [`ImportObject`] with [`wasmer::WasiState`] with the latest snapshot
-    /// of WASI.
-    fn generate_import_object(env: JNIEnv, jwasi_env: JObject) -> ImportObject {
-        let state_gen = move || {
-            fn state_destructor(data: *mut c_void) {
-                unsafe {
-                    drop(Box::from_raw(data as *mut i32));
-                }
-            }
-
-            let state = Box::new(0);
-
-            (
-                Box::into_raw(state) as *mut c_void,
-                state_destructor as fn(*mut c_void),
-            )
-        };
-
-        generate_import_object_snapshot1_inner(env, jwasi_env, state_gen)
-    }
-
     /// Combines a state generating function with the import list for snapshot 1
-    fn generate_import_object_snapshot1_inner<F>(
-        env: JNIEnv,
-        jwasi_env0: JObject,
-        state_gen: F,
-    ) -> ImportObject
-    where
-        F: Fn() -> (*mut c_void, fn(*mut c_void)) + Send + Sync + 'static,
-    {
+    fn generate_import_object_snapshot1_inner(env: JNIEnv, jwasi_env0: JObject) -> ImportObject {
         let jvm0 = Arc::new(env.get_java_vm().unwrap());
         let jwasi_env0 = Arc::new(env.new_global_ref(jwasi_env0).unwrap());
 
@@ -304,7 +276,6 @@ pub mod android {
         };
 
         imports! {
-                state_gen,
                 "wasi_snapshot_preview1" => {
                     //"args_get" => func!(args_get),
                     //"args_sizes_get" => func!(args_sizes_get),
