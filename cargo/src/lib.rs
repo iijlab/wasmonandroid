@@ -157,33 +157,10 @@ pub mod android {
 
         let jvm = jvm0.clone();
         let jwasi_env = jwasi_env0.clone();
-        let fd_prestat_get =
-            move |ctx: &mut Ctx, fd: __wasi_fd_t, buf: WasmPtr<__wasi_prestat_t>| -> WasiErrno {
-                let env = jvm
-                    .attach_current_thread()
-                    .expect("Failed o get JNIEnv for fd_prestat_get");
-                debug!("wasi::fd_prestat_get: fd={}", fd);
-                call_jwasi_env_method(
-                    &env,
-                    jwasi_env.as_obj(),
-                    "fdPrestatGet",
-                    "(ILjp/co/iijii/wasmonandroid/NativePointer;)S",
-                    &[
-                        JValue::Int(fd as jint),
-                        JValue::Object(
-                            unsafe {
-                                to_jni_ptr(
-                                    &env,
-                                    &ctx.memory(0),
-                                    "jp/co/iijii/wasmonandroid/NativePointer",
-                                    buf,
-                                )
-                            }
-                            .unwrap(),
-                        ),
-                    ],
-                )
-            };
+        let fd_prestat_get = move |ctx: &mut Ctx,
+                                   fd: __wasi_fd_t,
+                                   buf: WasmPtr<__wasi_prestat_t>|
+              -> WasiErrno { 1 };
 
         let jvm = jvm0.clone();
         let jwasi_env = jwasi_env0.clone();
@@ -191,36 +168,7 @@ pub mod android {
                                         fd: __wasi_fd_t,
                                         path: WasmPtr<u8, Array>,
                                         path_len: u32|
-              -> WasiErrno {
-            debug!(
-                "wasi::fd_prestat_dir_name: fd={}, path_len={}",
-                fd, path_len
-            );
-            let env = jvm
-                .attach_current_thread()
-                .expect("Failed o get JNIEnv for fd_prestat_dir_name");
-            call_jwasi_env_method(
-                &env,
-                jwasi_env.as_obj(),
-                "fdPrestatDirName",
-                "(ILjp/co/iijii/wasmonandroid/wasi/I8ArrayWriter;I)S",
-                &[
-                    JValue::Int(fd as jint),
-                    JValue::Object(
-                        unsafe {
-                            to_jni_ptr(
-                                &env,
-                                &ctx.memory(0),
-                                "jp/co/iijii/wasmonandroid/wasi/I8ArrayWriter",
-                                path,
-                            )
-                        }
-                        .unwrap(),
-                    ),
-                    JValue::Int(path_len as jint),
-                ],
-            )
-        };
+              -> WasiErrno { 0 };
 
         let jvm = jvm0.clone();
         let jwasi_env = jwasi_env0.clone();
@@ -229,51 +177,7 @@ pub mod android {
                              iovs: WasmPtr<__wasi_ciovec_t, Array>,
                              iovs_len: u32,
                              nwritten: WasmPtr<u32>|
-              -> WasiErrno {
-            debug!("wasi::fd_write: fd={}, iovs_len={}", fd, iovs_len);
-            let env = jvm
-                .attach_current_thread()
-                .expect("Failed o get JNIEnv for fd_write");
-            let memory = ctx.memory(0);
-            call_jwasi_env_method(
-                &env,
-                jwasi_env.as_obj(),
-                "fdWrite",
-                "(Ljp/co/iijii/wasmonandroid/wasi/WasiMemory;ILjp/co/iijii/wasmonandroid/NativeArray;ILjp/co/iijii/wasmonandroid/wasi/SizePointer;)S",
-                &[
-                    JValue::Object(
-                        make_wasi_memory(
-                            &env,
-                            &memory,
-                        )
-                    ),
-                    JValue::Int(fd as jint),
-                    JValue::Object(
-                        unsafe {
-                            to_jni_ptr(
-                                &env,
-                                &memory,
-                                "jp/co/iijii/wasmonandroid/NativeArray",
-                                iovs,
-                            )
-                        }
-                        .unwrap(),
-                    ),
-                    JValue::Int(iovs_len as jint),
-                    JValue::Object(
-                        unsafe {
-                            to_jni_ptr(
-                                &env,
-                                &memory,
-                                "jp/co/iijii/wasmonandroid/wasi/SizePointer",
-                                nwritten,
-                            )
-                        }
-                        .unwrap(),
-                    ),
-                ],
-            )
-        };
+              -> WasiErrno { 0 };
 
         imports! {
                 "wasi_snapshot_preview1" => {
